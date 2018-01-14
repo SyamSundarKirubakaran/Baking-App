@@ -1,5 +1,6 @@
 package com.bugscript.bakingapp;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,8 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.bugscript.bakingapp.Description.DetailedList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,7 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static boolean tabletSize=false;
     private ProgressBar progressBar;
     private GridView gridview;
     public static int[] ing_numbers;
@@ -36,17 +39,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        tabletSize = getResources().getBoolean(R.bool.isTablet);
         progressBar=findViewById(R.id.progressBar);
         gridview = findViewById(R.id.gridview);
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || tabletSize)
             gridview.setNumColumns(2);
-        }
         getContentsFromJson();
     }
 
     private void getContentsFromJson()  {
         try {
-            JSONArray jsonArray = new JSONArray(loadJSONFromAssert());
+            final JSONArray jsonArray = new JSONArray(loadJSONFromAssert());
             dishNames=new String[jsonArray.length()];
             servings=new String[jsonArray.length()];
             ing_numbers=new int[jsonArray.length()];
@@ -95,12 +98,12 @@ public class MainActivity extends AppCompatActivity {
                     thumbnailURL[i][j]=jw.getString("thumbnailURL");
                 }
             }
-            Toast.makeText(MainActivity.this,"JSON Parsing successfull..",Toast.LENGTH_LONG).show();
             gridview.setAdapter(new HomeAdapter(MainActivity.this));
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Toast.makeText(MainActivity.this,position+"",Toast.LENGTH_SHORT).show();
+                    Intent i=new Intent(MainActivity.this, DetailedList.class);
+                    startActivity(i);
                 }
             });
             progressBar.setVisibility(View.INVISIBLE);
