@@ -20,9 +20,9 @@ public class DetailedList extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.container_1, contents_1)
                 .commit();
-//        IngredFragmentContent contents_2 = new IngredFragmentContent();
-//        fragmentManager.beginTransaction()
-//                .add(R.id.container_2, contents_2)
-//                .commit();
+        StepFragmentContent contents_2=new StepFragmentContent();
+        fragmentManager.beginTransaction()
+                .add(R.id.container_2, contents_2)
+                .commit();
     }
 }
