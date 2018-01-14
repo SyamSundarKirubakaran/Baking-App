@@ -23,7 +23,7 @@ public class HomeAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return MainActivity.dishNames.length;
     }
 
     @Override
