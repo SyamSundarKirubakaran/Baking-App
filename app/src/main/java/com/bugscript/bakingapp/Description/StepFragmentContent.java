@@ -6,9 +6,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
@@ -17,9 +19,13 @@ import com.bugscript.bakingapp.R;
  * Created by syamsundark on 14/01/18.
  */
 
-public class StepFragmentContent extends Fragment{
+public class StepFragmentContent extends Fragment
+        implements StepsAdapter.ListItemClickListener{
+
+    private static final String TAG = StepFragmentContent.class.getSimpleName();
 
     private StepsAdapter mAdapter;
+    private Toast mToast;
 
     public StepFragmentContent() {
     }
@@ -44,9 +50,19 @@ public class StepFragmentContent extends Fragment{
             }
         }
 
-        mAdapter = new StepsAdapter(DetailedList.id,flag);
+        mAdapter = new StepsAdapter(DetailedList.id,flag,this);
         IngredList.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onListItemClick(int clickedItemIndex) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
+        mToast = Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG);
+        mToast.show();
     }
 }

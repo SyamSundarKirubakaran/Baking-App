@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 
 public class DetailedList extends AppCompatActivity {
@@ -15,6 +16,12 @@ public class DetailedList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_list);
         id=getIntent().getExtras().getInt("id");
+
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setTitle(MainActivity.dishNames[id]);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         IngredFragmentContent contents_1 = new IngredFragmentContent();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()

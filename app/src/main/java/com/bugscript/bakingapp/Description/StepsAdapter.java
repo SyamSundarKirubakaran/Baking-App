@@ -19,9 +19,19 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     private static int mTimes;
     private static int mIndex;
 
-    public StepsAdapter(int index,int times) {
+    final private ListItemClickListener mOnClickListener;
+
+
+    private int mNumberItems;
+
+    public interface ListItemClickListener {
+        void onListItemClick(int clickedItemIndex);
+    }
+
+    public StepsAdapter(int index,int times, ListItemClickListener listener) {
         mIndex=index;
         mTimes=times;
+        mOnClickListener=listener;
     }
 
     @Override
@@ -47,14 +57,22 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
         return mTimes;
     }
 
-    class StepViewHolder extends RecyclerView.ViewHolder{
+    class StepViewHolder extends RecyclerView.ViewHolder
+            implements View.OnClickListener{
         TextView stepsToBeDone;
         public StepViewHolder(View itemView) {
             super(itemView);
             stepsToBeDone=itemView.findViewById(R.id.tv_step_name);
+            itemView.setOnClickListener(this);
         }
         void bind(int listIndex) {
             stepsToBeDone.setText(MainActivity.shortDescription[mIndex][listIndex]);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int clickedPosition = getAdapterPosition();
+            mOnClickListener.onListItemClick(clickedPosition);
         }
     }
 
