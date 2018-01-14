@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent i=new Intent(MainActivity.this, DetailedList.class);
+                    i.putExtra("id",position);
                     startActivity(i);
                 }
             });

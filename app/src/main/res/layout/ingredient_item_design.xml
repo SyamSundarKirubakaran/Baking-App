@@ -29,7 +29,7 @@
         android:text="Measure"
         android:id="@+id/tv_measure"
         android:layout_marginTop="32dp"
-        android:layout_marginLeft="80dp" />
+        android:layout_marginLeft="60dp" />
 
     <ImageView
         android:layout_width="wrap_content"

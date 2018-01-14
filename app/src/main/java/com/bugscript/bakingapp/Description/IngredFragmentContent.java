@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 
 /**
@@ -17,8 +18,6 @@ import com.bugscript.bakingapp.R;
  */
 
 public class IngredFragmentContent extends Fragment{
-
-    private static final int NUM_LIST_ITEMS = 50;
 
     private IngredAdapter mAdapter;
 
@@ -36,9 +35,17 @@ public class IngredFragmentContent extends Fragment{
 
         IngredList.setHasFixedSize(true);
 
-        mAdapter = new IngredAdapter(NUM_LIST_ITEMS);
-        IngredList.setAdapter(mAdapter);
+        int flag=0;
+        for(int i=0;i< MainActivity.ingredient[DetailedList.id].length;i++){
+            if(MainActivity.ingredient[DetailedList.id][i]==null){
+                break;
+            }else{
+                flag+=1;
+            }
+        }
 
+        mAdapter = new IngredAdapter(DetailedList.id,flag);
+        IngredList.setAdapter(mAdapter);
 
         return rootView;
     }

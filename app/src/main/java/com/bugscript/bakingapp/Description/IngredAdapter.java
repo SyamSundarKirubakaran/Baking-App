@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 
 /**
@@ -16,8 +17,10 @@ import com.bugscript.bakingapp.R;
 public class IngredAdapter extends RecyclerView.Adapter<IngredAdapter.IngredViewHolder>{
 
     private static int mTimes;
+    private static int mIndex;
 
-    public IngredAdapter(int times) {
+    public IngredAdapter(int index,int times) {
+        mIndex=index;
         mTimes=times;
     }
 
@@ -55,7 +58,9 @@ public class IngredAdapter extends RecyclerView.Adapter<IngredAdapter.IngredView
             measureTextView=itemView.findViewById(R.id.tv_measure);
         }
         void bind(int listIndex) {
-            ingredTextView.setText(String.valueOf(listIndex));
+            ingredTextView.setText(MainActivity.ingredient[mIndex][listIndex]);
+            quantityTextView.setText(MainActivity.quantity[mIndex][listIndex]);
+            measureTextView.setText(MainActivity.measure[mIndex][listIndex]);
         }
     }
 
