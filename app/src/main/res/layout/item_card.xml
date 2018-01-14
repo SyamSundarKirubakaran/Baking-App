@@ -20,7 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/card_image_height"
             android:scaleType="centerCrop"
-            tools:src="@drawable/a" />
+            android:src="@drawable/a"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:alpha="0.3"
+            android:background="@color/colorAccent" />
         <TextView
             android:id="@+id/card_title"
             android:layout_width="match_parent"
