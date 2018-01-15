@@ -1,5 +1,6 @@
 package com.bugscript.bakingapp.Steps;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,12 +19,37 @@ import com.bugscript.bakingapp.Description.StepFragmentContent;
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelection;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DataSource;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.upstream.TransferListener;
+import com.google.android.exoplayer2.util.Util;
 
 /**
  * Created by syamsundark on 15/01/18.
  */
 
 public class FullDescriptionFragment extends Fragment{
+
+    private SimpleExoPlayerView simpleExoPlayerView;
+    private SimpleExoPlayer player;
+
+    private Timeline.Window window;
+    private DataSource.Factory mediaDataSourceFactory;
+    private DefaultTrackSelector trackSelector;
+    private boolean shouldAutoPlay;
+    private BandwidthMeter bandwidthMeter;
 
     public FullDescriptionFragment() {
     }
@@ -67,6 +93,7 @@ public class FullDescriptionFragment extends Fragment{
         shortDesc=rootView.findViewById(R.id.complete_short_desc);
         completeDesc=rootView.findViewById(R.id.complete_desc);
         mPlayer=rootView.findViewById(R.id.video_frame_layout);
+        simpleExoPlayerView = rootView.findViewById(R.id.player_view);
         updatelist();
         BottomNavigationView navigation = rootView.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -78,9 +105,78 @@ public class FullDescriptionFragment extends Fragment{
             mPlayer.setVisibility(View.GONE);
         }else{
             mPlayer.setVisibility(View.VISIBLE);
+            shouldAutoPlay = false;
+            bandwidthMeter = new DefaultBandwidthMeter();
+            mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
+            window = new Timeline.Window();
+            initializePlayer();
         }
         shortDesc.setText(MainActivity.shortDescription[DetailedList.id][tempSelection]);
         completeDesc.setText(MainActivity.description[DetailedList.id][tempSelection]);
+    }
+
+    private void initializePlayer() {
+
+        simpleExoPlayerView.requestFocus();
+
+        TrackSelection.Factory videoTrackSelectionFactory =
+                new AdaptiveTrackSelection.Factory(bandwidthMeter);
+
+        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+
+        player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
+
+        simpleExoPlayerView.setPlayer(player);
+
+        player.setPlayWhenReady(shouldAutoPlay);
+
+        DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+
+        MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(MainActivity.videoURL[DetailedList.id][tempSelection]),
+                mediaDataSourceFactory, extractorsFactory, null, null);
+
+        player.prepare(mediaSource);
+    }
+
+    private void releasePlayer() {
+        if (player != null) {
+            shouldAutoPlay = player.getPlayWhenReady();
+            player.release();
+            player = null;
+            trackSelector = null;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            initializePlayer();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
     }
 
 }
