@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +17,7 @@ import com.bugscript.bakingapp.Description.DetailedList;
 import com.bugscript.bakingapp.Description.StepFragmentContent;
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
+import com.google.android.exoplayer2.ExoPlayer;
 
 /**
  * Created by syamsundark on 15/01/18.
@@ -26,9 +28,10 @@ public class FullDescriptionFragment extends Fragment{
     public FullDescriptionFragment() {
     }
 
-    private static int tempSelection=StepFragmentContent.currentSelection;
+    private int tempSelection=StepFragmentContent.currentSelection;
     private TextView shortDesc;
     private TextView completeDesc;
+    private FrameLayout mPlayer;
     private int tempoFlag =StepFragmentContent.ultimateFlag;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -63,6 +66,7 @@ public class FullDescriptionFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragmet_full_desc, container, false);
         shortDesc=rootView.findViewById(R.id.complete_short_desc);
         completeDesc=rootView.findViewById(R.id.complete_desc);
+        mPlayer=rootView.findViewById(R.id.video_frame_layout);
         updatelist();
         BottomNavigationView navigation = rootView.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -70,6 +74,11 @@ public class FullDescriptionFragment extends Fragment{
     }
 
     private void updatelist(){
+        if(MainActivity.videoURL[DetailedList.id][tempSelection].equals("")){
+            mPlayer.setVisibility(View.GONE);
+        }else{
+            mPlayer.setVisibility(View.VISIBLE);
+        }
         shortDesc.setText(MainActivity.shortDescription[DetailedList.id][tempSelection]);
         completeDesc.setText(MainActivity.description[DetailedList.id][tempSelection]);
     }
