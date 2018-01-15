@@ -1,16 +1,22 @@
 package com.bugscript.bakingapp.Steps;
 
+import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,8 +63,10 @@ public class FullDescriptionFragment extends Fragment{
     private int tempSelection=StepFragmentContent.currentSelection;
     private TextView shortDesc;
     private TextView completeDesc;
-    private FrameLayout mPlayer;
+    private FrameLayout bottomNavigation;
     private int tempoFlag =StepFragmentContent.ultimateFlag;
+    private RelativeLayout allContents;
+    private boolean videoAvailableFlag;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -92,8 +100,9 @@ public class FullDescriptionFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragmet_full_desc, container, false);
         shortDesc=rootView.findViewById(R.id.complete_short_desc);
         completeDesc=rootView.findViewById(R.id.complete_desc);
-        mPlayer=rootView.findViewById(R.id.video_frame_layout);
+        allContents=rootView.findViewById(R.id.all_contents);
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
+        bottomNavigation= rootView.findViewById(R.id.frameLayout);
         updatelist();
         BottomNavigationView navigation = rootView.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -102,9 +111,11 @@ public class FullDescriptionFragment extends Fragment{
 
     private void updatelist(){
         if(MainActivity.videoURL[DetailedList.id][tempSelection].equals("")){
-            mPlayer.setVisibility(View.GONE);
+            simpleExoPlayerView.setVisibility(View.GONE);
+            videoAvailableFlag=false;
         }else{
-            mPlayer.setVisibility(View.VISIBLE);
+            videoAvailableFlag=true;
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
             shouldAutoPlay = false;
             bandwidthMeter = new DefaultBandwidthMeter();
             mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
@@ -116,25 +127,16 @@ public class FullDescriptionFragment extends Fragment{
     }
 
     private void initializePlayer() {
-
         simpleExoPlayerView.requestFocus();
-
         TrackSelection.Factory videoTrackSelectionFactory =
                 new AdaptiveTrackSelection.Factory(bandwidthMeter);
-
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-
         player = ExoPlayerFactory.newSimpleInstance(getContext(), trackSelector);
-
         simpleExoPlayerView.setPlayer(player);
-
         player.setPlayWhenReady(shouldAutoPlay);
-
         DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-
         MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(MainActivity.videoURL[DetailedList.id][tempSelection]),
                 mediaDataSourceFactory, extractorsFactory, null, null);
-
         player.prepare(mediaSource);
     }
 
@@ -179,4 +181,24 @@ public class FullDescriptionFragment extends Fragment{
         }
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
+            allContents.setVisibility(View.VISIBLE);
+            bottomNavigation.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+            params.width=params.MATCH_PARENT;
+            params.height=600;
+            simpleExoPlayerView.setLayoutParams(params);
+        }else if (newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag){
+            allContents.setVisibility(View.GONE);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+            params.width=params.MATCH_PARENT;
+            params.height=params.MATCH_PARENT;
+            simpleExoPlayerView.setLayoutParams(params);
+        }else if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+            bottomNavigation.setVisibility(View.GONE);
+        }
+    }
 }
