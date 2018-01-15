@@ -26,6 +26,9 @@ public class StepFragmentContent extends Fragment
 
     private static final String TAG = StepFragmentContent.class.getSimpleName();
 
+    public static int currentSelection;
+    public static int ultimateFlag;
+
     private StepsAdapter mAdapter;
     private Toast mToast;
 
@@ -49,6 +52,7 @@ public class StepFragmentContent extends Fragment
                 break;
             }else{
                 flag+=1;
+                ultimateFlag=flag;
             }
         }
 
@@ -66,6 +70,7 @@ public class StepFragmentContent extends Fragment
         String toastMessage = "Item #" + clickedItemIndex + " clicked.";
         mToast = Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG);
         mToast.show();
+        currentSelection=clickedItemIndex;
         Intent i=new Intent(getActivity(), FullDescription.class);
         startActivity(i);
     }
