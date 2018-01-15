@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 import com.bugscript.bakingapp.Steps.FullDescription;
+import com.bugscript.bakingapp.Steps.FullDescriptionFragment;
 
 /**
  * Created by syamsundark on 14/01/18.
@@ -31,6 +33,7 @@ public class StepFragmentContent extends Fragment
 
     private StepsAdapter mAdapter;
     private Toast mToast;
+    private int numberOfClicks;
 
     public StepFragmentContent() {
     }
@@ -40,7 +43,7 @@ public class StepFragmentContent extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.ingredient_item, container, false);
         RecyclerView IngredList=rootView.findViewById(R.id.rv_ingred);
-
+        numberOfClicks=0;
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         IngredList.setLayoutManager(layoutManager);
 
@@ -67,11 +70,26 @@ public class StepFragmentContent extends Fragment
         if (mToast != null) {
             mToast.cancel();
         }
-        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
-        mToast = Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG);
-        mToast.show();
+//        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
+//        mToast = Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG);
+//        mToast.show();
+        numberOfClicks=1;
         currentSelection=clickedItemIndex;
-        Intent i=new Intent(getActivity(), FullDescription.class);
-        startActivity(i);
+        if(MainActivity.tabletSize){
+            FullDescriptionFragment fullDescriptionFragment=new FullDescriptionFragment();
+            FragmentManager fragmentManager = getFragmentManager();
+            if(numberOfClicks==0) {
+                fragmentManager.beginTransaction()
+                        .add(R.id.main_desc, fullDescriptionFragment)
+                        .commit();
+            }else{
+                fragmentManager.beginTransaction()
+                        .replace(R.id.main_desc, fullDescriptionFragment)
+                        .commit();
+            }
+        }else {
+            Intent i = new Intent(getActivity(), FullDescription.class);
+            startActivity(i);
+        }
     }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
+import com.bugscript.bakingapp.Steps.FullDescriptionFragment;
 
 public class DetailedList extends AppCompatActivity {
 
@@ -22,14 +23,28 @@ public class DetailedList extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        IngredFragmentContent contents_1 = new IngredFragmentContent();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.container_1, contents_1)
-                .commit();
-        StepFragmentContent contents_2=new StepFragmentContent();
-        fragmentManager.beginTransaction()
-                .add(R.id.container_2, contents_2)
-                .commit();
+        if(MainActivity.tabletSize){
+            IngredFragmentContent contents_1 = new IngredFragmentContent();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container_1, contents_1)
+                    .commit();
+            StepFragmentContent contents_2 = new StepFragmentContent();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container_2, contents_2)
+                    .commit();
+
+        }else {
+
+            IngredFragmentContent contents_1 = new IngredFragmentContent();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container_1, contents_1)
+                    .commit();
+            StepFragmentContent contents_2 = new StepFragmentContent();
+            fragmentManager.beginTransaction()
+                    .add(R.id.container_2, contents_2)
+                    .commit();
+        }
     }
 }

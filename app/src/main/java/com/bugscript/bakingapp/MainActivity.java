@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         gridview = findViewById(R.id.gridview);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || tabletSize)
             gridview.setNumColumns(2);
+        if(tabletSize && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+            gridview.setNumColumns(3);
         getContentsFromJson();
     }
 

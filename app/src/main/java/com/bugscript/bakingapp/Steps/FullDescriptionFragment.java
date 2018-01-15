@@ -103,6 +103,9 @@ public class FullDescriptionFragment extends Fragment{
         allContents=rootView.findViewById(R.id.all_contents);
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
         bottomNavigation= rootView.findViewById(R.id.frameLayout);
+        if(MainActivity.tabletSize){
+            bottomNavigation.setVisibility(View.GONE);
+        }
         updatelist();
         BottomNavigationView navigation = rootView.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -184,21 +187,25 @@ public class FullDescriptionFragment extends Fragment{
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation==Configuration.ORIENTATION_PORTRAIT){
-            allContents.setVisibility(View.VISIBLE);
-            bottomNavigation.setVisibility(View.VISIBLE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=600;
-            simpleExoPlayerView.setLayoutParams(params);
-        }else if (newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag){
-            allContents.setVisibility(View.GONE);
-            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-            params.width=params.MATCH_PARENT;
-            params.height=params.MATCH_PARENT;
-            simpleExoPlayerView.setLayoutParams(params);
-        }else if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
-            bottomNavigation.setVisibility(View.GONE);
+        if(MainActivity.tabletSize){
+            
+        }else {
+            if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                allContents.setVisibility(View.VISIBLE);
+                bottomNavigation.setVisibility(View.VISIBLE);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+                params.width = params.MATCH_PARENT;
+                params.height = 600;
+                simpleExoPlayerView.setLayoutParams(params);
+            } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag) {
+                allContents.setVisibility(View.GONE);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+                params.width = params.MATCH_PARENT;
+                params.height = params.MATCH_PARENT;
+                simpleExoPlayerView.setLayoutParams(params);
+            } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                bottomNavigation.setVisibility(View.GONE);
+            }
         }
     }
 }
