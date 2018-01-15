@@ -1,6 +1,7 @@
 package com.bugscript.bakingapp.Description;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
+import com.bugscript.bakingapp.Steps.FullDescription;
 
 /**
  * Created by syamsundark on 14/01/18.
@@ -64,5 +66,7 @@ public class StepFragmentContent extends Fragment
         String toastMessage = "Item #" + clickedItemIndex + " clicked.";
         mToast = Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG);
         mToast.show();
+        Intent i=new Intent(getActivity(), FullDescription.class);
+        startActivity(i);
     }
 }
