@@ -77,6 +77,9 @@ public class FullDescriptionFragment extends Fragment{
                     if(tempSelection>0) {
                         tempSelection -= 1;
                         updatelist();
+                        if(!(MainActivity.videoURL[DetailedList.id][tempSelection+1].equals(""))){
+                            releasePlayer();
+                        }
                     }else{
                         Toast.makeText(getContext(),"No Previous Contents",Toast.LENGTH_SHORT).show();
                     }
@@ -85,6 +88,9 @@ public class FullDescriptionFragment extends Fragment{
                     if(tempSelection<tempoFlag-1) {
                         tempSelection+=1;
                         updatelist();
+                        if(!(MainActivity.videoURL[DetailedList.id][tempSelection-1].equals(""))){
+                            releasePlayer();
+                        }
                     }else{
                         Toast.makeText(getContext(),"Can't navigate furthur",Toast.LENGTH_SHORT).show();
                     }
@@ -119,7 +125,7 @@ public class FullDescriptionFragment extends Fragment{
         }else{
             videoAvailableFlag=true;
             simpleExoPlayerView.setVisibility(View.VISIBLE);
-            shouldAutoPlay = false;
+            shouldAutoPlay = true;
             bandwidthMeter = new DefaultBandwidthMeter();
             mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
             window = new Timeline.Window();
@@ -149,25 +155,9 @@ public class FullDescriptionFragment extends Fragment{
             player.release();
             player = null;
             trackSelector = null;
+            simpleExoPlayerView.destroyDrawingCache();
         }
     }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (Util.SDK_INT > 23) {
-            initializePlayer();
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if ((Util.SDK_INT <= 23 || player == null)) {
-            initializePlayer();
-        }
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -175,7 +165,6 @@ public class FullDescriptionFragment extends Fragment{
             releasePlayer();
         }
     }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -183,7 +172,6 @@ public class FullDescriptionFragment extends Fragment{
             releasePlayer();
         }
     }
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
