@@ -10,6 +10,9 @@ import android.widget.TextView;
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by syamsundark on 14/01/18.
  */
@@ -43,6 +46,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
 
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
         StepViewHolder viewHolder=new StepViewHolder(view);
+        view.setTag(viewHolder);
 
         return viewHolder;
     }
@@ -59,10 +63,11 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
 
     class StepViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
-        TextView stepsToBeDone;
+        @BindView(R.id.tv_step_name) TextView stepsToBeDone;
+
         public StepViewHolder(View itemView) {
             super(itemView);
-            stepsToBeDone=itemView.findViewById(R.id.tv_step_name);
+            ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);
         }
         void bind(int listIndex) {

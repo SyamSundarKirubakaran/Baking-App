@@ -23,10 +23,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.progressBar) ProgressBar progressBar;
+    @BindView(R.id.gridview) GridView gridview;
+
     public static boolean tabletSize=false;
-    private ProgressBar progressBar;
-    private GridView gridview;
     public static int[] ing_numbers;
     public static int[] step_numbers;
     public static String [] dishNames;
@@ -44,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         tabletSize = getResources().getBoolean(R.bool.isTablet);
-        progressBar=findViewById(R.id.progressBar);
-        gridview = findViewById(R.id.gridview);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || tabletSize)
             gridview.setNumColumns(2);
         if(tabletSize && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)

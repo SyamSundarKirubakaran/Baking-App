@@ -13,11 +13,17 @@ import android.widget.TextView;
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by syamsundark on 14/01/18.
  */
 
 public class IngredFragmentContent extends Fragment{
+    @BindView(R.id.rv_ingred) RecyclerView IngredList;
+    private Unbinder unbinder;
 
     private IngredAdapter mAdapter;
 
@@ -28,7 +34,7 @@ public class IngredFragmentContent extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.ingredient_item, container, false);
-        RecyclerView IngredList=rootView.findViewById(R.id.rv_ingred);
+        unbinder= ButterKnife.bind(this,rootView);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         IngredList.setLayoutManager(layoutManager);
@@ -50,4 +56,9 @@ public class IngredFragmentContent extends Fragment{
         return rootView;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
 }

@@ -10,6 +10,9 @@ import android.widget.TextView;
 import com.bugscript.bakingapp.MainActivity;
 import com.bugscript.bakingapp.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by syamsundark on 14/01/18.
  */
@@ -33,6 +36,7 @@ public class IngredAdapter extends RecyclerView.Adapter<IngredAdapter.IngredView
 
         View view = inflater.inflate(layoutIdForListItem, parent, shouldAttachToParentImmediately);
         IngredViewHolder viewHolder=new IngredViewHolder(view);
+        view.setTag(viewHolder);
 
         return viewHolder;
     }
@@ -48,14 +52,13 @@ public class IngredAdapter extends RecyclerView.Adapter<IngredAdapter.IngredView
     }
 
     class IngredViewHolder extends RecyclerView.ViewHolder{
-        TextView ingredTextView;
-        TextView quantityTextView;
-        TextView measureTextView;
+        @BindView(R.id.tv_ingred_name) TextView ingredTextView;
+        @BindView(R.id.tv_quantity) TextView quantityTextView;
+        @BindView(R.id.tv_measure) TextView measureTextView;
+
         public IngredViewHolder(View itemView) {
             super(itemView);
-            ingredTextView=itemView.findViewById(R.id.tv_ingred_name);
-            quantityTextView=itemView.findViewById(R.id.tv_quantity);
-            measureTextView=itemView.findViewById(R.id.tv_measure);
+            ButterKnife.bind(this,itemView);
         }
         void bind(int listIndex) {
             ingredTextView.setText(MainActivity.ingredient[mIndex][listIndex]);

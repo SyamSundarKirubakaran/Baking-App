@@ -6,7 +6,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by syamsundark on 14/01/18.
@@ -39,15 +43,25 @@ public class HomeAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         CardView cardView;
-        TextView dish;
+        ViewHolder viewHolder;
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             cardView = (CardView) inflater.inflate(R.layout.item_card, parent, false);
-            dish=cardView.findViewById(R.id.card_title);
-            dish.setText(MainActivity.dishNames[position]);
+            viewHolder=new ViewHolder(cardView);
+            cardView.setTag(viewHolder);
+            viewHolder.dish.setText(MainActivity.dishNames[position]);
         } else {
             cardView = (CardView) convertView;
         }
         return cardView;
     }
+
+    static class ViewHolder{
+        @BindView(R.id.card_title) TextView dish;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this,view);
+        }
+    }
+
 }

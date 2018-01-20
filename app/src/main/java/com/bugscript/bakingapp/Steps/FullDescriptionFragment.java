@@ -42,13 +42,23 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * Created by syamsundark on 15/01/18.
  */
 
 public class FullDescriptionFragment extends Fragment{
+    @BindView(R.id.complete_short_desc) TextView shortDesc;
+    @BindView(R.id.complete_desc) TextView completeDesc;
+    @BindView(R.id.all_contents) RelativeLayout allContents;
+    @BindView(R.id.player_view) SimpleExoPlayerView simpleExoPlayerView;
+    @BindView(R.id.frameLayout) FrameLayout bottomNavigation;
+    @BindView(R.id.navigation) BottomNavigationView navigation;
+    private Unbinder unbinder;
 
-    private SimpleExoPlayerView simpleExoPlayerView;
     private SimpleExoPlayer player;
 
     private Timeline.Window window;
@@ -61,11 +71,7 @@ public class FullDescriptionFragment extends Fragment{
     }
 
     private int tempSelection=StepFragmentContent.currentSelection;
-    private TextView shortDesc;
-    private TextView completeDesc;
-    private FrameLayout bottomNavigation;
     private int tempoFlag =StepFragmentContent.ultimateFlag;
-    private RelativeLayout allContents;
     private boolean videoAvailableFlag;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -104,16 +110,11 @@ public class FullDescriptionFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragmet_full_desc, container, false);
-        shortDesc=rootView.findViewById(R.id.complete_short_desc);
-        completeDesc=rootView.findViewById(R.id.complete_desc);
-        allContents=rootView.findViewById(R.id.all_contents);
-        simpleExoPlayerView = rootView.findViewById(R.id.player_view);
-        bottomNavigation= rootView.findViewById(R.id.frameLayout);
+        unbinder= ButterKnife.bind(this,rootView);
         if(MainActivity.tabletSize){
             bottomNavigation.setVisibility(View.GONE);
         }
         updatelist();
-        BottomNavigationView navigation = rootView.findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         return rootView;
     }
@@ -195,5 +196,11 @@ public class FullDescriptionFragment extends Fragment{
                 bottomNavigation.setVisibility(View.GONE);
             }
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 }
