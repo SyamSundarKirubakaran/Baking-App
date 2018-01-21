@@ -3,6 +3,10 @@ package com.bugscript.bakingapp;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bugscript.bakingapp.Description.DetailedList;
+import com.bugscript.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.bugscript.bakingapp.Utilities.NetworkUtils;
 
 import org.json.JSONArray;
@@ -45,6 +50,18 @@ public class MainActivity extends AppCompatActivity {
     public static String [][] thumbnailURL;
     public static String [] servings;
     private URL url;
+
+    @Nullable
+    private SimpleIdlingResource mIdlingResource;
+    @VisibleForTesting
+    @NonNull
+    public IdlingResource getIdlingResource() {
+        if (mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
