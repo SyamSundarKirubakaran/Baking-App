@@ -25,7 +25,7 @@ public class MainActivityGridTest {
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
     @Test
-    public void clickGridViewItem_OpensOrderActivity() {
+    public void clickGridViewItem() {
         onData(anything()).inAdapterView(withId(R.id.gridview)).atPosition(1).perform(click());
         onView(withId(R.id.ingred_textView)).check(matches(withText(HEAD_NAME)));
     }
