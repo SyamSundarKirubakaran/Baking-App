@@ -25,6 +25,12 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".Steps.FullDescription"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"></activity>
+
+        <provider
+            android:authorities="com.bugscript.bakingapp"
+            android:name="com.bugscript.bakingapp.provider.ContentProvider"
+            android:exported="true" />
+
     </application>
 
 </manifest>

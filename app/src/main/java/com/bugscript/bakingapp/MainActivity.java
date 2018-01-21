@@ -2,6 +2,7 @@ package com.bugscript.bakingapp;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.bugscript.bakingapp.Description.DetailedList;
 import com.bugscript.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.bugscript.bakingapp.Utilities.NetworkUtils;
+import com.bugscript.bakingapp.provider.ContractClass;
 
 import org.json.JSONArray;
 import org.json.JSONException;
