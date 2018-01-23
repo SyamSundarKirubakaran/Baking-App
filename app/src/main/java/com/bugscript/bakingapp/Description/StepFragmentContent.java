@@ -39,7 +39,6 @@ public class StepFragmentContent extends Fragment
     public static int ultimateFlag;
 
     private StepsAdapter mAdapter;
-    private Toast mToast;
     private int numberOfClicks;
 
     public StepFragmentContent() {
@@ -75,12 +74,6 @@ public class StepFragmentContent extends Fragment
 
     @Override
     public void onListItemClick(int clickedItemIndex) {
-        if (mToast != null) {
-            mToast.cancel();
-        }
-//        String toastMessage = "Item #" + clickedItemIndex + " clicked.";
-//        mToast = Toast.makeText(getContext(), toastMessage, Toast.LENGTH_LONG);
-//        mToast.show();
         numberOfClicks=1;
         currentSelection=clickedItemIndex;
         if(MainActivity.tabletSize){

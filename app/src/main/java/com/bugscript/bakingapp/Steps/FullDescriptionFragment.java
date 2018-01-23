@@ -184,7 +184,7 @@ public class FullDescriptionFragment extends Fragment{
                 bottomNavigation.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
                 params.width = params.MATCH_PARENT;
-                params.height = 600;
+                params.height = 700;
                 simpleExoPlayerView.setLayoutParams(params);
             } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag) {
                 allContents.setVisibility(View.GONE);

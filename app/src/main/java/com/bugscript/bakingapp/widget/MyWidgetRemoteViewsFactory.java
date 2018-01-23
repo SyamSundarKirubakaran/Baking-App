@@ -2,6 +2,7 @@ package com.bugscript.bakingapp.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Binder;
 import android.widget.AdapterView;
@@ -35,7 +36,8 @@ public class MyWidgetRemoteViewsFactory implements RemoteViewsService.RemoteView
             mCursor.close();
         }
 
-        String dummy= "1";
+        SharedPreferences sharedPreferences= mContext.getApplicationContext().getSharedPreferences("ingrad_pref",0);
+        String dummy= sharedPreferences.getInt("selection",4)+"";
 
         final long identityToken = Binder.clearCallingIdentity();
         mCursor = mContext.getContentResolver().query(ContractClass.nameClass.CONTENT_URI,
