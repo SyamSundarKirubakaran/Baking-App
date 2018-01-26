@@ -21,7 +21,7 @@ The app follows the [Rubic](https://review.udacity.com/#!/rubrics/829/view) whic
 - Effective usage of libraries
 - UI Testing using Espresso
 - Nested Scoll View
-- Adaptive Design (Switches to Master-Detail flow when on tables)
+- Adaptive Design (Switches to Master-Detail flow when on tablets)
 - Fragments
 - Widgets
 - Content provider
@@ -33,5 +33,15 @@ The app follows the [Rubic](https://review.udacity.com/#!/rubrics/829/view) whic
 - Bug fix
 - Shared Preferences
 - To follow Material Design Guidelines<br />
+
+## Showcase
+<br />
+<p align="center">
+  <img src="previews/phone_preview.gif">
+</p><br />
+<p align="center">
+  <img src="previews/tablet_preview.gif">
+</p>
+
 
 
