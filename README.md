@@ -12,3 +12,26 @@ Submission for Android NanoDegree Project
 
 ## Description:
 An app that shows ingredients and steps to prepare some recipes which is fetched in Real-time from the given [JSON](https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json) file.<br />
+
+## Requirements and Objectives:
+The app follows the [Rubic](https://review.udacity.com/#!/rubrics/829/view) which is prescribed by Udacity.
+
+**Things I've Learnt:**
+- Card View
+- Effective usage of libraries
+- UI Testing using Espresso
+- Nested Scoll View
+- Adaptive Design (Switches to Master-Detail flow when on tables)
+- Fragments
+- Widgets
+- Content provider
+- SQLite
+- ExoPlayer for Stream video from a [Video URL](https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4)
+- Networking in Android
+- JSON Parsing
+- Handling Exception with uneven JSON Resource
+- Bug fix
+- Shared Preferences
+- To follow Material Design Guidelines<br />
+
+
