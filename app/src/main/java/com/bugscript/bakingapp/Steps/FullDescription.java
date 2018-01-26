@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.bugscript.bakingapp.Description.DetailedList;
 import com.bugscript.bakingapp.MainActivity;
@@ -18,20 +19,17 @@ public class FullDescription extends AppCompatActivity {
         if(getSupportActionBar()!=null) {
             getSupportActionBar().setTitle(MainActivity.dishNames[DetailedList.id]);
         }
-        FullDescriptionFragment fullDescriptionFragment=new FullDescriptionFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.main_desc, fullDescriptionFragment)
-                .commit();
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             getSupportActionBar().hide();
         }else{
             getSupportActionBar().show();
         }
+
+        FullDescriptionFragment fullDescriptionFragment=new FullDescriptionFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_desc, fullDescriptionFragment)
+                .commit();
     }
 }

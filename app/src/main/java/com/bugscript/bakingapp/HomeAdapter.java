@@ -7,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bugscript.bakingapp.Description.DetailedList;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +62,7 @@ public class HomeAdapter extends BaseAdapter {
 
     static class ViewHolder{
         @BindView(R.id.card_title) TextView dish;
+        @BindView(R.id.itemcardImage) ImageView dishImageLoad;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this,view);

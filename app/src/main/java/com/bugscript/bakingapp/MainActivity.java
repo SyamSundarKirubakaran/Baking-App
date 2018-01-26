@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     public static String [][] videoURL;
     public static String [][] thumbnailURL;
     public static String [] servings;
+    public static String [] dishImage;
     private URL url;
 
     @Nullable
@@ -110,12 +111,14 @@ public class MainActivity extends AppCompatActivity {
                     final JSONArray jsonArray = new JSONArray(Results);
                     dishNames=new String[jsonArray.length()];
                     servings=new String[jsonArray.length()];
+                    dishImage=new String[jsonArray.length()];
                     ing_numbers=new int[jsonArray.length()];
                     step_numbers=new int[jsonArray.length()];
                     for(int i=0;i<jsonArray.length();i++){
                         JSONObject jo=jsonArray.getJSONObject(i);
                         dishNames[i]=jo.getString("name");
                         servings[i]=jo.getString("servings");
+                        dishImage[i]=jo.getString("image");
                         JSONArray jsonArray1=jo.getJSONArray("ingredients");
                         ing_numbers[i]=jsonArray1.length();
                         JSONArray jsonArray2=jo.getJSONArray("steps");

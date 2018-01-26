@@ -25,8 +25,7 @@
             android:name=".Description.DetailedList"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".Steps.FullDescription"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode" />
+            android:name=".Steps.FullDescription" />
 
         <provider
             android:name=".provider.ContentProvider"
