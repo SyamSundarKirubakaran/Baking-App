@@ -24,6 +24,7 @@ The app follows the [Rubic](https://review.udacity.com/#!/rubrics/829/view) whic
 - Adaptive Design (Switches to Master-Detail flow when on tablets)
 - Fragments
 - Widgets
+- Accessing Remote Views
 - Content provider
 - SQLite
 - ExoPlayer for Stream video from a [Video URL](https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4)
