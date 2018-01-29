@@ -77,6 +77,8 @@ public class StepFragmentContent extends Fragment
         numberOfClicks=1;
         currentSelection=clickedItemIndex;
         if(MainActivity.tabletSize){
+            FullDescriptionFragment.tempSelection=clickedItemIndex;
+            FullDescriptionFragment.tempoFlag=ultimateFlag;
             FullDescriptionFragment fullDescriptionFragment=new FullDescriptionFragment();
             FragmentManager fragmentManager = getFragmentManager();
             if(numberOfClicks==0) {
@@ -90,6 +92,8 @@ public class StepFragmentContent extends Fragment
             }
         }else {
             Intent i = new Intent(getActivity(), FullDescription.class);
+            FullDescriptionFragment.tempSelection=clickedItemIndex;
+            FullDescriptionFragment.tempoFlag=ultimateFlag;
             startActivity(i);
         }
     }

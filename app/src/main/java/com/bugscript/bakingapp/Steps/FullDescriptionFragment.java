@@ -1,5 +1,6 @@
 package com.bugscript.bakingapp.Steps;
 
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -13,6 +14,7 @@ import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,12 +80,14 @@ public class FullDescriptionFragment extends Fragment{
     private DefaultTrackSelector trackSelector;
     private static boolean shouldAutoPlay;
     private BandwidthMeter bandwidthMeter;
+    private static long playbackPosition=0;
+    public static final String PLAYBACK_POSITION = "playback_position";
 
     public FullDescriptionFragment() {
     }
 
-    private static int tempSelection=StepFragmentContent.currentSelection;
-    private static int tempoFlag =StepFragmentContent.ultimateFlag;
+    public static int tempSelection=StepFragmentContent.currentSelection;
+    public static int tempoFlag =StepFragmentContent.ultimateFlag;
     private static boolean videoAvailableFlag;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -93,22 +97,24 @@ public class FullDescriptionFragment extends Fragment{
             switch (item.getItemId()) {
                 case R.id.navigation_left:
                     if(tempSelection>0) {
+                        playbackPosition=0;
                         tempSelection -= 1;
-                        updatelist();
                         if(!(MainActivity.videoURL[DetailedList.id][tempSelection+1].equals(""))){
                             releasePlayer();
                         }
+                        updatelist();
                     }else{
                         Toast.makeText(getContext(),"No Previous Contents",Toast.LENGTH_SHORT).show();
                     }
                     return true;
                 case R.id.navigation_right:
                     if(tempSelection<tempoFlag-1) {
+                        playbackPosition=0;
                         tempSelection+=1;
-                        updatelist();
                         if(!(MainActivity.videoURL[DetailedList.id][tempSelection-1].equals(""))){
                             releasePlayer();
                         }
+                        updatelist();
                     }else{
                         Toast.makeText(getContext(),"Can't navigate furthur",Toast.LENGTH_SHORT).show();
                     }
@@ -129,6 +135,8 @@ public class FullDescriptionFragment extends Fragment{
             if(savedInstanceState!=null){
                 tempSelection=savedInstanceState.getInt(SELECTION_MADE_ON_STATE);
                 videoAvailableFlag=savedInstanceState.getBoolean(VIDEO_AVAIL);
+                playbackPosition=savedInstanceState.getLong(PLAYBACK_POSITION);
+                Log.e("STATUS:",tempSelection+" @GetSavedInstanceState");
             }
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 allContents.setVisibility(View.VISIBLE);
@@ -138,7 +146,7 @@ public class FullDescriptionFragment extends Fragment{
                 params.height = 700;
                 simpleExoPlayerView.setLayoutParams(params);
             } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag) {
-                Toast.makeText(getContext(),"From Fragment config change..",Toast.LENGTH_SHORT).show();
+                Log.e("STATUS: ",tempSelection+" @inside LANDSCAPE");
                 allContents.setVisibility(View.GONE);
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
                 params.width = params.MATCH_PARENT;
@@ -148,7 +156,6 @@ public class FullDescriptionFragment extends Fragment{
                 bottomNavigation.setVisibility(View.GONE);
             }
         }
-        updatelist();
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         return rootView;
     }
@@ -171,7 +178,10 @@ public class FullDescriptionFragment extends Fragment{
             bandwidthMeter = new DefaultBandwidthMeter();
             mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
             window = new Timeline.Window();
-            initializePlayer();
+            if(player==null) {
+                initializePlayer();
+                Log.e("STATUS:",tempSelection+" PlayerInitialized..");
+            }
         }
         shortDesc.setText(MainActivity.shortDescription[DetailedList.id][tempSelection]);
         completeDesc.setText(MainActivity.description[DetailedList.id][tempSelection]);
@@ -188,6 +198,7 @@ public class FullDescriptionFragment extends Fragment{
         DefaultExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
         MediaSource mediaSource = new ExtractorMediaSource(Uri.parse(MainActivity.videoURL[DetailedList.id][tempSelection]),
                 mediaDataSourceFactory, extractorsFactory, null, null);
+        player.seekTo(playbackPosition);
         player.prepare(mediaSource);
     }
 
@@ -198,13 +209,7 @@ public class FullDescriptionFragment extends Fragment{
             player = null;
             trackSelector = null;
             simpleExoPlayerView.destroyDrawingCache();
-        }
-    }
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
+            Log.e("STATUS:", tempSelection + " @ReleasePlayer");
         }
     }
     @Override
@@ -212,18 +217,46 @@ public class FullDescriptionFragment extends Fragment{
         super.onStop();
         if (Util.SDK_INT > 23) {
             releasePlayer();
+            Log.e("STATUS:",tempSelection+" @onStop");
         }
     }
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (Util.SDK_INT <= 23 && player==null) {
+            updatelist();
+            Log.e("STATUS:",tempSelection+" @onResume");
+        }
+        updatelist();
+        Log.e("STATUS:",tempSelection+" @onResumeOutside");
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+            Log.e("STATUS:",tempSelection+" @onPause");
+        }
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        Log.e("STATUS:", tempSelection + " @onDestroyView");
     }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if(videoAvailableFlag) {
+            playbackPosition = player.getCurrentPosition();
+        }else{
+            playbackPosition=0;
+        }
+        outState.putLong(PLAYBACK_POSITION, playbackPosition);
         outState.putInt(SELECTION_MADE_ON_STATE,tempSelection);
         outState.putBoolean(VIDEO_AVAIL,videoAvailableFlag);
+        Log.e("STATUS:",tempSelection+" @onSavedInstanceAssignment");
     }
 }
