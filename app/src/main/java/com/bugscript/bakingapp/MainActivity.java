@@ -43,7 +43,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.gridview) RecyclerView gridview;
+    @BindView(R.id.gridviewRecycler) RecyclerView recyclerView;
 
     public static boolean tabletSize=false;
     public static int[] ing_numbers;
@@ -180,10 +180,10 @@ public class MainActivity extends AppCompatActivity {
             HomeAdapter homeAdapter =
                     new HomeAdapter(MainActivity.this);
             StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
-            gridview.setLayoutManager(staggeredGridLayoutManager);
-            gridview.setAdapter(homeAdapter);
+            recyclerView.setLayoutManager(staggeredGridLayoutManager);
+            recyclerView.setAdapter(homeAdapter);
             progressBar.setVisibility(View.INVISIBLE);
-            gridview.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.VISIBLE);
         }
     }
 }

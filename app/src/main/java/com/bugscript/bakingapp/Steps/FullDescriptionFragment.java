@@ -218,9 +218,6 @@ public class FullDescriptionFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        if (Util.SDK_INT <= 23 && player==null) {
-            updatelist();
-        }
         updatelist();
     }
 

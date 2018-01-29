@@ -8,6 +8,9 @@ import static org.hamcrest.Matchers.anything;
 
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.IdlingResource;
+import android.support.test.espresso.action.ViewActions;
+import android.support.test.espresso.contrib.RecyclerViewActions;
+import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -34,7 +37,8 @@ public class MainActivityIdlingResources {
     }
     @Test
     public void idlingResourceTest() {
-        onData(anything()).inAdapterView(withId(R.id.gridview)).atPosition(0).perform(click());
+        Espresso.onView(ViewMatchers.withId(R.id.gridviewRecycler))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
     }
     @After
     public void unregisterIdlingResource() {
