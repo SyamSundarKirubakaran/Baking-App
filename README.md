@@ -33,7 +33,14 @@ The app follows the [Rubic](https://review.udacity.com/#!/rubrics/829/view) whic
 - Handling Exception with uneven JSON Resource
 - Bug fix
 - Shared Preferences
+- Picasso
+- Glide
+- onSavedInstanceState(Data presistence)
+- Recycler View
 - To follow Material Design Guidelines<br />
+
+**Last Updated:** 
+29th Jan 2017 - 2:50pm
 
 ## Showcase
 <br />
@@ -43,6 +50,8 @@ The app follows the [Rubic](https://review.udacity.com/#!/rubrics/829/view) whic
 <p align="center">
   <img src="previews/tablet_preview.gif">
 </p>
+
+
 
 
 
