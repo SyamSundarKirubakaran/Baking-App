@@ -72,13 +72,14 @@ public class FullDescriptionFragment extends Fragment{
     private Unbinder unbinder;
     private static final String SELECTION_MADE_ON_STATE = "SelectOn";
     private static final String VIDEO_AVAIL = "videoAvailablility";
+    private static final String PLAY_STATE_RESTORE="playstate";
 
     private SimpleExoPlayer player;
 
     private Timeline.Window window;
     private DataSource.Factory mediaDataSourceFactory;
     private DefaultTrackSelector trackSelector;
-    private static boolean shouldAutoPlay;
+    public static boolean shouldAutoPlay=true;
     private BandwidthMeter bandwidthMeter;
     private static long playbackPosition=0;
     public static final String PLAYBACK_POSITION = "playback_position";
@@ -97,6 +98,7 @@ public class FullDescriptionFragment extends Fragment{
             switch (item.getItemId()) {
                 case R.id.navigation_left:
                     if(tempSelection>0) {
+                        shouldAutoPlay = true;
                         playbackPosition=0;
                         tempSelection -= 1;
                         if(!(MainActivity.videoURL[DetailedList.id][tempSelection+1].equals(""))){
@@ -109,6 +111,7 @@ public class FullDescriptionFragment extends Fragment{
                     return true;
                 case R.id.navigation_right:
                     if(tempSelection<tempoFlag-1) {
+                        shouldAutoPlay = true;
                         playbackPosition=0;
                         tempSelection+=1;
                         if(!(MainActivity.videoURL[DetailedList.id][tempSelection-1].equals(""))){
@@ -133,6 +136,7 @@ public class FullDescriptionFragment extends Fragment{
             bottomNavigation.setVisibility(View.GONE);
         }else{
             if(savedInstanceState!=null){
+                shouldAutoPlay=savedInstanceState.getBoolean(PLAY_STATE_RESTORE);
                 tempSelection=savedInstanceState.getInt(SELECTION_MADE_ON_STATE);
                 videoAvailableFlag=savedInstanceState.getBoolean(VIDEO_AVAIL);
                 playbackPosition=savedInstanceState.getLong(PLAYBACK_POSITION);
@@ -172,7 +176,6 @@ public class FullDescriptionFragment extends Fragment{
             ThumbnailViewImage.setVisibility(View.GONE);
             videoAvailableFlag=true;
             simpleExoPlayerView.setVisibility(View.VISIBLE);
-            shouldAutoPlay = true;
             bandwidthMeter = new DefaultBandwidthMeter();
             mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
             window = new Timeline.Window();
@@ -242,6 +245,8 @@ public class FullDescriptionFragment extends Fragment{
         }else{
             playbackPosition=0;
         }
+        shouldAutoPlay = player.getPlayWhenReady();
+        outState.putBoolean(PLAY_STATE_RESTORE,shouldAutoPlay);
         outState.putLong(PLAYBACK_POSITION, playbackPosition);
         outState.putInt(SELECTION_MADE_ON_STATE,tempSelection);
         outState.putBoolean(VIDEO_AVAIL,videoAvailableFlag);
