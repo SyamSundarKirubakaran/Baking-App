@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bugscript.bakingapp.Description.DetailedList;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -41,6 +42,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.dish.setText(MainActivity.dishNames[position]);
+        if (MainActivity.dishImage[position] != "") {
+            Glide.with(mContext)
+                    .load(MainActivity.dishImage[position])
+                    .into(holder.dishImageLoad);
+        }
         holder.dishImageLoad.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
