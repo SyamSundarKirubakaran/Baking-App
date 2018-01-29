@@ -14,6 +14,9 @@ import android.support.design.widget.Snackbar;
 import android.support.test.espresso.IdlingResource;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -40,7 +43,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
 
     @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.gridview) GridView gridview;
+    @BindView(R.id.gridview) RecyclerView gridview;
 
     public static boolean tabletSize=false;
     public static int[] ing_numbers;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     public static String [] servings;
     public static String [] dishImage;
     private URL url;
+    private static int NUM_COLUMNS;
 
     @Nullable
     private SimpleIdlingResource mIdlingResource;
@@ -76,9 +80,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         tabletSize = getResources().getBoolean(R.bool.isTablet);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE || tabletSize)
-            gridview.setNumColumns(2);
+            NUM_COLUMNS=2;
         if(tabletSize && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-            gridview.setNumColumns(3);
+            NUM_COLUMNS=3;
+        if(!tabletSize && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
+            NUM_COLUMNS=1;
         if(isNetworkAvailable()) {
             try {
                 url = new URL("https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json");
@@ -171,15 +177,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            gridview.setAdapter(new HomeAdapter(MainActivity.this));
-            gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent i=new Intent(MainActivity.this, DetailedList.class);
-                    i.putExtra("id",position);
-                    startActivity(i);
-                }
-            });
+            HomeAdapter homeAdapter =
+                    new HomeAdapter(MainActivity.this);
+            StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(NUM_COLUMNS, LinearLayoutManager.VERTICAL);
+            gridview.setLayoutManager(staggeredGridLayoutManager);
+            gridview.setAdapter(homeAdapter);
             progressBar.setVisibility(View.INVISIBLE);
             gridview.setVisibility(View.VISIBLE);
         }
