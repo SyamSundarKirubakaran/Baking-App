@@ -4,6 +4,7 @@ import android.content.res.Configuration;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.bugscript.bakingapp.Description.DetailedList;
 import com.bugscript.bakingapp.MainActivity;
@@ -19,6 +20,7 @@ public class FullDescription extends AppCompatActivity {
             getSupportActionBar().setTitle(MainActivity.dishNames[DetailedList.id]);
         }
 
+        Log.e("STATUS: ","@onActivity");
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             getSupportActionBar().hide();
         }else{

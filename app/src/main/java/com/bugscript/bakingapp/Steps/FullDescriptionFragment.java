@@ -81,7 +81,7 @@ public class FullDescriptionFragment extends Fragment{
     private DefaultTrackSelector trackSelector;
     public static boolean shouldAutoPlay=true;
     private BandwidthMeter bandwidthMeter;
-    private static long playbackPosition=0;
+    public static long playbackPosition=0;
     public static final String PLAYBACK_POSITION = "playback_position";
 
     public FullDescriptionFragment() {
@@ -132,32 +132,17 @@ public class FullDescriptionFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragmet_full_desc, container, false);
         unbinder= ButterKnife.bind(this,rootView);
-        if(MainActivity.tabletSize){
-            bottomNavigation.setVisibility(View.GONE);
-        }else{
-            if(savedInstanceState!=null){
-                shouldAutoPlay=savedInstanceState.getBoolean(PLAY_STATE_RESTORE);
-                tempSelection=savedInstanceState.getInt(SELECTION_MADE_ON_STATE);
-                videoAvailableFlag=savedInstanceState.getBoolean(VIDEO_AVAIL);
-                playbackPosition=savedInstanceState.getLong(PLAYBACK_POSITION);
-            }
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                allContents.setVisibility(View.VISIBLE);
-                bottomNavigation.setVisibility(View.VISIBLE);
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-                params.width = params.MATCH_PARENT;
-                params.height = 700;
-                simpleExoPlayerView.setLayoutParams(params);
-            } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag) {
-                allContents.setVisibility(View.GONE);
-                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-                params.width = params.MATCH_PARENT;
-                params.height = params.MATCH_PARENT;
-                simpleExoPlayerView.setLayoutParams(params);
-            } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                bottomNavigation.setVisibility(View.GONE);
+        if(!MainActivity.tabletSize) {
+            if (savedInstanceState != null) {
+                shouldAutoPlay = savedInstanceState.getBoolean(PLAY_STATE_RESTORE);
+                tempSelection = savedInstanceState.getInt(SELECTION_MADE_ON_STATE);
+                videoAvailableFlag = savedInstanceState.getBoolean(VIDEO_AVAIL);
+                playbackPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
+                Log.e("STATUS:", tempSelection + " @GetSavedInstanceState");
             }
         }
+        shortDesc.setText(MainActivity.shortDescription[DetailedList.id][tempSelection]);
+        completeDesc.setText(MainActivity.description[DetailedList.id][tempSelection]);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         return rootView;
     }
@@ -180,11 +165,31 @@ public class FullDescriptionFragment extends Fragment{
             mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
             window = new Timeline.Window();
             if(player==null) {
+                Log.e("STATUS:",tempSelection+" PlayerInitialized..");
                 initializePlayer();
             }
         }
-        shortDesc.setText(MainActivity.shortDescription[DetailedList.id][tempSelection]);
-        completeDesc.setText(MainActivity.description[DetailedList.id][tempSelection]);
+        if(MainActivity.tabletSize){
+            bottomNavigation.setVisibility(View.GONE);
+        }else{
+            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                allContents.setVisibility(View.VISIBLE);
+                bottomNavigation.setVisibility(View.VISIBLE);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+                params.width = params.MATCH_PARENT;
+                params.height = 700;
+                simpleExoPlayerView.setLayoutParams(params);
+            } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag) {
+                Log.e("STATUS: ",tempSelection+" @inside LANDSCAPE");
+                allContents.setVisibility(View.GONE);
+                LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+                params.width = params.MATCH_PARENT;
+                params.height = params.MATCH_PARENT;
+                simpleExoPlayerView.setLayoutParams(params);
+            } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                bottomNavigation.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initializePlayer() {
@@ -209,6 +214,7 @@ public class FullDescriptionFragment extends Fragment{
             player = null;
             trackSelector = null;
             simpleExoPlayerView.destroyDrawingCache();
+            Log.e("STATUS:", tempSelection + " @ReleasePlayer");
         }
     }
     @Override
@@ -216,12 +222,19 @@ public class FullDescriptionFragment extends Fragment{
         super.onStop();
         if (Util.SDK_INT > 23) {
             releasePlayer();
+            Log.e("STATUS:",tempSelection+" @onStop");
         }
     }
     @Override
     public void onResume() {
         super.onResume();
+        if (Util.SDK_INT <= 23 && player==null) {
+            updatelist();
+            Log.e("STATUS:",tempSelection+" @onResume");
+        }
+
         updatelist();
+        Log.e("STATUS:",tempSelection+" @onResumeOutside");
     }
 
     @Override
@@ -230,12 +243,14 @@ public class FullDescriptionFragment extends Fragment{
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
+        Log.e("STATUS:",tempSelection+" @onPause");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        Log.e("STATUS:", tempSelection + " @onDestroyView");
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -245,10 +260,13 @@ public class FullDescriptionFragment extends Fragment{
         }else{
             playbackPosition=0;
         }
-        shouldAutoPlay = player.getPlayWhenReady();
+        if(player!=null) {
+            shouldAutoPlay = player.getPlayWhenReady();
+        }
         outState.putBoolean(PLAY_STATE_RESTORE,shouldAutoPlay);
         outState.putLong(PLAYBACK_POSITION, playbackPosition);
         outState.putInt(SELECTION_MADE_ON_STATE,tempSelection);
         outState.putBoolean(VIDEO_AVAIL,videoAvailableFlag);
+        Log.e("STATUS:",tempSelection+" @onSavedInstanceAssignment");
     }
 }

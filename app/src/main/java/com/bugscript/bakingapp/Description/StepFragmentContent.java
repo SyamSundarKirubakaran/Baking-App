@@ -79,6 +79,7 @@ public class StepFragmentContent extends Fragment
         if(MainActivity.tabletSize){
             FullDescriptionFragment.tempSelection=clickedItemIndex;
             FullDescriptionFragment.tempoFlag=ultimateFlag;
+            FullDescriptionFragment.playbackPosition=0;
             FullDescriptionFragment fullDescriptionFragment=new FullDescriptionFragment();
             FragmentManager fragmentManager = getFragmentManager();
             if(numberOfClicks==0) {
