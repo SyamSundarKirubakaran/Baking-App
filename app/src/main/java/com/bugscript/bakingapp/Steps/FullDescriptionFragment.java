@@ -138,7 +138,6 @@ public class FullDescriptionFragment extends Fragment{
                 tempSelection = savedInstanceState.getInt(SELECTION_MADE_ON_STATE);
                 videoAvailableFlag = savedInstanceState.getBoolean(VIDEO_AVAIL);
                 playbackPosition = savedInstanceState.getLong(PLAYBACK_POSITION);
-                Log.e("STATUS:", tempSelection + " @GetSavedInstanceState");
             }
         }
         shortDesc.setText(MainActivity.shortDescription[DetailedList.id][tempSelection]);
@@ -165,7 +164,6 @@ public class FullDescriptionFragment extends Fragment{
             mediaDataSourceFactory = new DefaultDataSourceFactory(getContext(), Util.getUserAgent(getContext(), "mediaPlayerSample"), (TransferListener<? super DataSource>) bandwidthMeter);
             window = new Timeline.Window();
             if(player==null) {
-                Log.e("STATUS:",tempSelection+" PlayerInitialized..");
                 initializePlayer();
             }
         }
@@ -180,7 +178,6 @@ public class FullDescriptionFragment extends Fragment{
                 params.height = 700;
                 simpleExoPlayerView.setLayoutParams(params);
             } else if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE && videoAvailableFlag) {
-                Log.e("STATUS: ",tempSelection+" @inside LANDSCAPE");
                 allContents.setVisibility(View.GONE);
                 LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
                 params.width = params.MATCH_PARENT;
@@ -214,7 +211,6 @@ public class FullDescriptionFragment extends Fragment{
             player = null;
             trackSelector = null;
             simpleExoPlayerView.destroyDrawingCache();
-            Log.e("STATUS:", tempSelection + " @ReleasePlayer");
         }
     }
     @Override
@@ -228,13 +224,7 @@ public class FullDescriptionFragment extends Fragment{
     @Override
     public void onResume() {
         super.onResume();
-        if (Util.SDK_INT <= 23 && player==null) {
-            updatelist();
-            Log.e("STATUS:",tempSelection+" @onResume");
-        }
-
         updatelist();
-        Log.e("STATUS:",tempSelection+" @onResumeOutside");
     }
 
     @Override
@@ -243,14 +233,12 @@ public class FullDescriptionFragment extends Fragment{
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
-        Log.e("STATUS:",tempSelection+" @onPause");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        Log.e("STATUS:", tempSelection + " @onDestroyView");
     }
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -267,6 +255,5 @@ public class FullDescriptionFragment extends Fragment{
         outState.putLong(PLAYBACK_POSITION, playbackPosition);
         outState.putInt(SELECTION_MADE_ON_STATE,tempSelection);
         outState.putBoolean(VIDEO_AVAIL,videoAvailableFlag);
-        Log.e("STATUS:",tempSelection+" @onSavedInstanceAssignment");
     }
 }

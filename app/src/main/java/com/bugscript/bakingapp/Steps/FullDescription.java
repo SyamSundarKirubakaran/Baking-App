@@ -20,7 +20,6 @@ public class FullDescription extends AppCompatActivity {
             getSupportActionBar().setTitle(MainActivity.dishNames[DetailedList.id]);
         }
 
-        Log.e("STATUS: ","@onActivity");
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE){
             getSupportActionBar().hide();
         }else{
